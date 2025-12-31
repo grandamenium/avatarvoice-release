@@ -1,0 +1,68 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution/packaging
+dist/
+build/
+*.egg-info/
+
+# Test files
+tests/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+
+# Large files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.wav
+*.mp3
+*.mp4
+data/
+
+# Development files
+.mypy_cache/
+.ruff_cache/
+*.log
+
+# Docs
+DOCS/
+docs/
+
+# Scripts
+scripts/
+
+# Deployment folder
+deployment/
+
+# Root src (we use api/src instead)
+src/
+
+# Integration plan docs
+integration-plan/
+
+# Config files not needed in deployment
+pyproject.toml
+setup.py
+pytest.ini
+.env.example

@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python312", "ffmpeg"]
+
+[phases.install]
+cmds = ["pip install -e ."]
+
+[start]
+cmd = "python -m src.avatarvoice_ui.app"
