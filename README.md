@@ -39,16 +39,33 @@ AI-powered voice cloning pipeline that analyzes avatar images, matches demograph
 
 ## Quick Start
 
+### Prerequisites
+
+- ArchitectDock account with GPU access
+- Gemini API key ([get one here](https://makersuite.google.com/app/apikey))
+- Git installed locally
+
 ### 1. GPU Setup (ArchitectDock)
 
-SSH into your GPU instance and start VibeVoice:
+**Deploy a new GPU instance:**
+- Image: `hygoinc/avatar-to-vibe-voice`
+- GPU: RTX 4090 (or similar)
+- Network Volume: `vibevoice-webui-prod` (California region)
+- Mount Path: `/workspace`
+
+**Start VibeVoice** (via SSH or web terminal):
 
 ```bash
-cd /workspace/VibeVoice
-bash scripts/gpu_run.sh
+cd /workspace/VibeVoiceTTS
+source .venv/bin/activate
+cd demo
+python gradio_demo.py --model_path ../models/VibeVoice-Large --share
 ```
 
-Copy the public URL (e.g., `https://xxxx.gradio.live`)
+**Copy the public URL** from the output:
+```
+Running on public URL: https://xxxxx.gradio.live
+```
 
 ### 2. Local Setup
 
@@ -61,15 +78,16 @@ cd avatarvoice
 bash scripts/local_install.sh
 
 # Configure environment
+cp .env.example .env
 # Edit .env and set:
 #   GEMINI_API_KEY=your_key_here
-#   VIBEVOICE_ENDPOINT=https://xxxx.gradio.live
+#   VIBEVOICE_ENDPOINT=https://xxxxx.gradio.live  (from GPU step)
 
 # Start the UI
 bash scripts/local_run.sh
 ```
 
-Open http://localhost:7861
+**Open http://localhost:7861**
 
 ## Configuration
 
@@ -133,7 +151,7 @@ ruff check src/
 
 **"VIBEVOICE_ENDPOINT not set"** - Set the GPU's Gradio URL in .env
 
-**GPU won't start** - Ensure model exists at `/workspace/VibeVoice/models/VibeVoice-Large`
+**GPU won't start** - Ensure model exists at `/workspace/VibeVoiceTTS/models/VibeVoice-Large`
 
 ## License
 

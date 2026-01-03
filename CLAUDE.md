@@ -10,6 +10,64 @@ The local app connects to a remote GPU running VibeVoice via Gradio's public URL
 
 ---
 
+## Quick Start (Full Setup)
+
+### Prerequisites
+- ArchitectDock account with GPU access
+- Gemini API key
+- Git installed locally
+
+### Step 1: GPU Server (ArchitectDock)
+
+1. **Deploy GPU instance**
+   - Image: `hygoinc/avatar-to-vibe-voice`
+   - GPU: RTX 4090 (or similar)
+   - Network Volume: `vibevoice-webui-prod` (California)
+   - Mount Path: `/workspace`
+
+2. **Start VibeVoice server** (via SSH or web terminal)
+   ```bash
+   cd /workspace/VibeVoiceTTS
+   source .venv/bin/activate
+   cd demo
+   python gradio_demo.py --model_path ../models/VibeVoice-Large --share
+   ```
+
+3. **Copy the public URL** from output:
+   ```
+   Running on public URL: https://xxxxx.gradio.live
+   ```
+
+### Step 2: Local Setup
+
+1. **Clone the repo**
+   ```bash
+   git clone <repo-url>
+   cd avatarvoice
+   ```
+
+2. **Install dependencies**
+   ```bash
+   bash scripts/local_install.sh
+   ```
+
+3. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env:
+   #   GEMINI_API_KEY=your-gemini-api-key
+   #   VIBEVOICE_ENDPOINT=https://xxxxx.gradio.live  (from GPU step)
+   ```
+
+4. **Start the app**
+   ```bash
+   bash scripts/local_run.sh
+   ```
+
+5. **Open in browser**: http://localhost:7861
+
+---
+
 ## GPU Instance (ArchitectDock)
 
 ### Infrastructure
@@ -24,28 +82,27 @@ The local app connects to a remote GPU running VibeVoice via Gradio's public URL
 
 ```
 /workspace/
-└── VibeVoice/
-    ├── gradio_demo.py          # Main Gradio app
+└── VibeVoiceTTS/
+    ├── .venv/                  # Python virtual environment
+    ├── demo/
+    │   └── gradio_demo.py      # Main Gradio app
     ├── models/
     │   └── VibeVoice-Large/    # TTS model (~3GB)
-    └── scripts/
-        └── gpu_run.sh          # Startup script
+    └── vibevoice/              # Core library
 ```
 
 ### Starting the GPU Server
 
 ```bash
-# SSH into GPU instance
-ssh user@architectdock-instance
+# SSH into GPU instance (or use web terminal)
 
-# Navigate to VibeVoice
-cd /workspace/VibeVoice
+# Navigate to VibeVoiceTTS and activate venv
+cd /workspace/VibeVoiceTTS
+source .venv/bin/activate
 
-# Start with auto-load (model loads on startup)
-bash scripts/gpu_run.sh
-
-# Or manually:
-python gradio_demo.py --model_path ./models/VibeVoice-Large --share
+# Start the Gradio server
+cd demo
+python gradio_demo.py --model_path ../models/VibeVoice-Large --share
 ```
 
 **Output will show:**
@@ -122,7 +179,7 @@ src/
 ### TTS generation fails
 - **Cause**: GPU endpoint not reachable
 - **Fix**:
-  1. Check GPU is running (`bash scripts/gpu_run.sh`)
+  1. Check GPU is running (see "Starting the GPU Server" above)
   2. Verify URL in `VIBEVOICE_ENDPOINT`
   3. Gradio live URLs expire after ~72 hours
 
@@ -132,7 +189,7 @@ src/
 
 ### Model not loading on GPU
 - **Cause**: Model files missing from volume
-- **Fix**: Ensure `/workspace/VibeVoice/models/VibeVoice-Large` exists
+- **Fix**: Ensure `/workspace/VibeVoiceTTS/models/VibeVoice-Large` exists
 
 ---
 
